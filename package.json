@@ -1,0 +1,21 @@
+{
+  "name": "cleanarch_chassis_nodejs",
+  "version": "0.1.0",
+  "description": "Chassis for NodeJS using Clean Architecture",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/application/manual-app/index.js",
+    "lint": "node_modules/.bin/eslint 'src/**/*.js'"
+  },
+  "author": "Diego Perez Molinero",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  },
+  "dependencies": {
+    "read-yaml-promise": "^1.0.2",
+    "yamljs": "^0.3.0"
+  }
+}
