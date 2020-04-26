@@ -19,11 +19,11 @@ function getConfigInYAML() {
 }
 
 function getCachedConfig() {
-  return configController.getCachedConfig(memConfigRepository, fileConfigRepository, configYAMLPresenter, 'chassis.yml');
+  return configController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, 'chassis.yml');
 }
 
 function getCachedConfigWithRefresh() {
-  return configController.getCachedConfig(memConfigRepository, fileConfigRepository, configYAMLPresenter, 'chassis.yml', true);
+  return configController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, 'chassis.yml', true);
 }
 
 (async () => {
