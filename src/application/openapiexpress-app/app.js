@@ -23,7 +23,6 @@ const logger = require('../../infrastructure/log/logColorLogger');
 (async () => {
   // Init logger
   logger.init({ level: 'debug' });
-
   // Init infrastructure controllers
   healthcheckInfraController.init(logger);
 
