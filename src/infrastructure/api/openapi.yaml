@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Chassis Clean Architecture NodeJS
+  description: Chassis for NodeJS using Clean Architecture
+  version: 0.1.0
+
+paths:
+
+  /healthcheck:
+    get:
+      summary: Healthcheck of the application
+      tags:
+        - "Healthcheck"
+      operationId: check
+      responses: 
+        "200": 
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+servers:
+  - url: /api
+
+components:
+  schemas:
+
+    # RESPONSES
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    InnerErrorResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        description:
+          type: string

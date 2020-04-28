@@ -1,6 +1,4 @@
-// index.js
-
-/* eslint-disable no-console */
+// app.js
 
 // Infrastructure
 

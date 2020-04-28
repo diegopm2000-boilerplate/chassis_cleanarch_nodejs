@@ -4,7 +4,8 @@
   "description": "Chassis for NodeJS using Clean Architecture",
   "main": "index.js",
   "scripts": {
-    "start": "node src/application/manual-app/index.js",
+    "start-manual": "node src/application/manual-app/app.js",
+    "start": "node src/application/openapiexpress-app/app.js",
     "lint": "node_modules/.bin/eslint 'src/**/*.js'"
   },
   "author": "Diego Perez Molinero",
@@ -15,8 +16,12 @@
     "eslint-plugin-import": "^2.20.2"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-openapi": "^6.0.0",
     "log-color": "^1.0.0",
     "read-yaml-promise": "^1.0.2",
+    "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"
   }
 }
