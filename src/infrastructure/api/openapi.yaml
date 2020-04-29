@@ -21,6 +21,22 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: 'OK'
+  
+  /config:
+    get:
+      summary: Get the application configuration. Don't expose this method in production environment!!!
+      tags:
+        - "Configuration"
+      operationId: getConfig
+      responses: 
+        "200": 
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectResponse'
+              example:
+                message: 'OK'
 
 servers:
   - url: /api
@@ -35,6 +51,9 @@ components:
       properties:
         message:
           type: string
+
+    ObjectResponse:
+      type: object
 
     InnerErrorResponse:
       type: object

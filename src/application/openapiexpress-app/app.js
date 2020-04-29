@@ -1,32 +1,21 @@
 // app.js
 
-// Infrastructure
+const container = require('../../infrastructure/container/container');
 
 const apiserver = require('../../infrastructure/server/openapiexpress');
 
-const healthcheckInfraController = require('../../infrastructure/server/controllers/healthcheckController');
-
-// const fileConfigRepository = require('../../infrastructure/file/fileConfigRepository');
-// const memConfigRepository = require('../../infrastructure/memory/memConfigRepository');
-
-// const log = require('../../infrastructure/log/consoleLogger');
-const logger = require('../../infrastructure/log/logColorLogger');
-
-// Interface Adapters
-
-// const configController = require('../../adapter/controller/configController');
-// const configJSONPresenter = require('../../adapter/presenter/configJSONPresenter');
-// const configYAMLPresenter = require('../../adapter/presenter/configYAMLPresenter');
-
-// Init
-
 (async () => {
+  // Init Container
+  container.init();
+
   // Init logger
-  logger.init({ level: 'debug' });
-  // Init infrastructure controllers
-  healthcheckInfraController.init(logger);
+  container.getLogger().init({ level: 'debug' });
+
+  // Load configuration from file and set in memory
+  const config = await container.getFileConfigRepository().getConfig('chassis.yml');
+  container.getLogger().debug(`config: ${JSON.stringify(config)}`);
+  await container.getMemConfigRepository().setConfig(config);
 
   // Init server & start
-  apiserver.init(logger);
   apiserver.start({ port: 8080, apiDocument: './src/infrastructure/api/openapi.yaml', serverTimeout: 50000 });
 })();

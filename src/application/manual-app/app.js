@@ -10,7 +10,8 @@ const log = require('../../infrastructure/log/logColorLogger');
 
 // Interface Adapters
 
-const configController = require('../../adapter/controller/configController');
+const configAdapterController = require('../../adapter/controller/configAdapterController');
+const cachedConfigAdapterController = require('../../adapter/controller/cachedConfigAdapterController');
 const configJSONPresenter = require('../../adapter/presenter/configJSONPresenter');
 const configYAMLPresenter = require('../../adapter/presenter/configYAMLPresenter');
 
@@ -19,19 +20,19 @@ const configYAMLPresenter = require('../../adapter/presenter/configYAMLPresenter
 // Execution
 
 function getConfigInJSON() {
-  return configController.getConfig(fileConfigRepository, configJSONPresenter, log, 'chassis.yml');
+  return configAdapterController.getConfig(fileConfigRepository, configJSONPresenter, log, 'chassis.yml');
 }
 
 function getConfigInYAML() {
-  return configController.getConfig(fileConfigRepository, configYAMLPresenter, log, 'chassis.yml');
+  return configAdapterController.getConfig(fileConfigRepository, configYAMLPresenter, log, 'chassis.yml');
 }
 
 function getCachedConfig() {
-  return configController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, log, 'chassis.yml');
+  return cachedConfigAdapterController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, log, 'chassis.yml');
 }
 
 function getCachedConfigWithRefresh() {
-  return configController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, log, 'chassis.yml', true);
+  return cachedConfigAdapterController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, log, 'chassis.yml', true);
 }
 
 (async () => {

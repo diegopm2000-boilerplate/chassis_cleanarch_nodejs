@@ -7,18 +7,11 @@ const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
 const YAML = require('yamljs');
 
-// Put your infrastructure controllers here
-const healthcheckController = require('./controllers/healthcheckController');
+const container = require('../container/container');
 
 const DEFAULT_PORT = 8080;
 const DEFAULT_REQUEST_TIMEOUT = 50000;
 const DEFAULT_SOCKET_TIMEOUT = 300000;
-
-let logger;
-
-exports.init = (log) => {
-  logger = log;
-};
 
 exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve, reject) => {
   try {
@@ -28,6 +21,8 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     const appPort = port || DEFAULT_PORT;
     module.exports.server = app.listen(appPort);
 
+    // TODO refactor the extraction of controller methods!!!
+
     // Initialize ExpressOpenApi
     expressOpenapi.initialize({
       app,
@@ -36,7 +31,8 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
         'application/json': bodyParser.json(),
       },
       operations: {
-        check: healthcheckController.check,
+        check: container.getHealthcheckController().check,
+        getConfig: container.getConfigController().getConfig,
       },
     });
 
@@ -50,7 +46,7 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     // Error Handler
     // eslint-disable-next-line no-unused-vars
     app.use((err, req, res, next) => {
-      logger.error(`error --> ${err.stack}`);
+      container.logger.error(`error --> ${err.stack}`);
       res.status(err.status).json(err);
     });
 
@@ -58,15 +54,15 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     const swaggerDocument = YAML.load(apiDocument);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-    logger.info(`App Server started at port: ${appPort} and Running OK!`);
+    container.getLogger().info(`App Server started at port: ${appPort} and Running OK!`);
 
     resolve(true);
   } catch (error) {
-    logger.error(`error: ${error.stack}`);
+    container.logger.error(`error: ${error.stack}`);
     reject(new Error('Express did not start correctly!'));
   }
 });
 
 exports.stop = () => {
-  module.exports.server.close(() => { logger.info('App Server stopped'); });
+  module.exports.server.close(() => { container.getLogger().info('App Server stopped'); });
 };
