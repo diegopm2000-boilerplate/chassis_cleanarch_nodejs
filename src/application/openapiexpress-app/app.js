@@ -14,7 +14,7 @@ const apiserver = require('../../infrastructure/server/openapiexpress');
   // Load configuration from file and set in memory
   const config = await container.getFileConfigRepository().getConfig('chassis.yml');
   container.getLogger().debug(`config: ${JSON.stringify(config)}`);
-  await container.getMemConfigRepository().setConfig(config);
+  await container.getContainerConfigRepository().setConfig(config);
 
   // Init server & start
   apiserver.start({ port: 8080, apiDocument: './src/infrastructure/api/openapi.yaml', serverTimeout: 50000 });

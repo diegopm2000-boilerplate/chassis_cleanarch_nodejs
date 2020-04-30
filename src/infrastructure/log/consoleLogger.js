@@ -14,6 +14,10 @@ exports.info = (message) => {
   console.info(message);
 };
 
+exports.warning = (message) => {
+  console.warn(message);
+};
+
 exports.error = (message) => {
   console.error(message);
 };

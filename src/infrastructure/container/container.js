@@ -5,13 +5,16 @@
 
 // const a = require('../memory/memConfigRepository');
 
-const store = {};
+// Module store
+const moduleStore = {};
+// Config store
+let configStore = {};
 
 const set = (name, pathfile) => {
-  store[name] = require(pathfile);
+  moduleStore[name] = require(pathfile);
 };
 
-const get = (name) => store[name];
+const get = (name) => moduleStore[name];
 
 const init = () => {
   // Logger
@@ -20,8 +23,9 @@ const init = () => {
   set('healthcheckController', '../server/controller/healthcheckController');
   set('configController', '../../infrastructure/server/controller/configController');
   // Infrastructure Repositories
-  set('fileConfigRepository', '../file/fileConfigRepository');
-  set('memConfigRepository', '../memory/memConfigRepository');
+  set('fileConfigRepository', '../repository/fileConfigRepository');
+  set('memConfigRepository', '../repository/memConfigRepository');
+  set('containerConfigRepository', '../repository/containerConfigRepository');
   // Adapter Interface Components
   set('configAdapterController', '../../adapter/controller/configAdapterController');
   set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
@@ -37,9 +41,17 @@ const getFileConfigRepository = () => get('fileConfigRepository');
 
 const getMemConfigRepository = () => get('memConfigRepository');
 
+const getContainerConfigRepository = () => get('containerConfigRepository');
+
 const getConfigAdapterController = () => get('configAdapterController');
 
 const getConfigJSONPresenter = () => get('configJSONPresenter');
+
+const getConfig = () => configStore;
+
+const setConfig = (data) => {
+  configStore = data;
+};
 
 module.exports = {
   init,
@@ -53,6 +65,9 @@ module.exports = {
   // Infrastructure Repositories
   getFileConfigRepository,
   getMemConfigRepository,
+  getContainerConfigRepository,
   getConfigAdapterController,
   getConfigJSONPresenter,
+  getConfig,
+  setConfig,
 };
