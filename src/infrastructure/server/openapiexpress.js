@@ -9,12 +9,16 @@ const YAML = require('yamljs');
 
 const container = require('../container/container');
 
+const MODULE_NAME = '[OpenApiExpress Server]';
+
 const DEFAULT_PORT = 8080;
 const DEFAULT_REQUEST_TIMEOUT = 50000;
 const DEFAULT_SOCKET_TIMEOUT = 300000;
 
 exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve, reject) => {
   try {
+    container.getLogger().info(`${MODULE_NAME} (IN) --> Server initializing...`);
+
     // Instance Expresss
     const app = express();
 
@@ -54,7 +58,7 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     const swaggerDocument = YAML.load(apiDocument);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-    container.getLogger().info(`App Server started at port: ${appPort} and Running OK!`);
+    container.getLogger().info(`${MODULE_NAME} (OUT) --> App Server started at port: ${appPort} and Running OK!`);
 
     resolve(true);
   } catch (error) {
