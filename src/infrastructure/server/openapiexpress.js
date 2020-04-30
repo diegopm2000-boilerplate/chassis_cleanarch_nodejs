@@ -17,7 +17,7 @@ const DEFAULT_SOCKET_TIMEOUT = 300000;
 
 exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve, reject) => {
   try {
-    container.getLogger().info(`${MODULE_NAME} (IN) --> Server initializing...`);
+    container.getLogger().info(`${MODULE_NAME} (IN) --> port: ${port}, apiDocument: ${apiDocument}, serverTimeout: ${serverTimeout}`);
 
     // Instance Expresss
     const app = express();
@@ -50,7 +50,7 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     // Error Handler
     // eslint-disable-next-line no-unused-vars
     app.use((err, req, res, next) => {
-      container.logger.error(`error --> ${err.stack}`);
+      container.logger.error(`${MODULE_NAME} (ERROR) --> error: ${err.stack}`);
       res.status(err.status).json(err);
     });
 
@@ -62,7 +62,7 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
 
     resolve(true);
   } catch (error) {
-    container.logger.error(`error: ${error.stack}`);
+    container.logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);
     reject(new Error('Express did not start correctly!'));
   }
 });
