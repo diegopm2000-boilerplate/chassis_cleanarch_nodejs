@@ -2,8 +2,8 @@
 
 // Infrastructure
 
-const fileConfigRepository = require('../../infrastructure/file/fileConfigRepository');
-const memConfigRepository = require('../../infrastructure/memory/memConfigRepository');
+const fileConfigRepository = require('../../infrastructure/repository/fileConfigRepository');
+const memConfigRepository = require('../../infrastructure/repository/memConfigRepository');
 
 // const log = require('../../infrastructure/log/consoleLogger');
 const log = require('../../infrastructure/log/logColorLogger');
