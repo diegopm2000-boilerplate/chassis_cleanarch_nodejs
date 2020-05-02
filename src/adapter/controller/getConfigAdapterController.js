@@ -1,5 +1,5 @@
-// configAdapterController.js
+// getConfigAdapterController.js
 
-const getConfigUC = require('../../usecase/getConfig');
+const container = require('../../infrastructure/container/container');
 
-exports.execute = (repository, presenter, logger, filename) => getConfigUC.execute(repository, presenter, logger, filename);
+exports.execute = (repository, presenter, logger, filename) => container.get('getConfigUC').execute(repository, presenter, logger, filename);
