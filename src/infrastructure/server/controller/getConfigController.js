@@ -5,7 +5,7 @@ const container = require('../../container/container');
 const MODULE_NAME = '[getConfigController]';
 
 exports.execute = async (req, res) => {
-  container.getLogger().info(`${MODULE_NAME} (IN) --> no params`);
+  container.getLogger().debug(`${MODULE_NAME} (IN) --> no params`);
 
   const getConfigAdapterController = container.get('getConfigAdapterController');
   const repository = container.get('containerConfigRepository');
@@ -14,6 +14,6 @@ exports.execute = async (req, res) => {
 
   const result = await getConfigAdapterController.execute(repository, presenter, logger);
 
-  container.getLogger().info(`${MODULE_NAME} (OUT) --> result: ${JSON.stringify(result)}`);
+  container.getLogger().debug(`${MODULE_NAME} (OUT) --> result: ${JSON.stringify(result)}`);
   res.json(result);
 };
