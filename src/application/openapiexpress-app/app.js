@@ -43,6 +43,8 @@ const loadEnvVars = () => {
 };
 
 const initConfig = async (envVars, logger) => {
+  // TODO load config from springcloudconfig (remote repository)
+
   // Init Configuration
   if (YAML_FILE === envVars.configSource) {
     const initialRepositoryName = 'fileConfigRepository';
