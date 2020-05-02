@@ -30,9 +30,6 @@ exports.init = () => {
   set('loadConfigAdapterController', '../../adapter/controller/loadConfigAdapterController');
   set('getConfigAdapterController', '../../adapter/controller/getConfigAdapterController');
   set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
-  // Use Cases
-  set('loadConfigUC', '../../usecase/loadConfig');
-  set('getConfigUC', '../../usecase/getConfig');
 };
 
 exports.getLogger = () => exports.get('logger');
