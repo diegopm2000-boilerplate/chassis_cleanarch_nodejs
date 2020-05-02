@@ -12,41 +12,67 @@ const YAML_FILE = 'YAML_FILE';
 
 const APIDOC_BASEPATH = './src/infrastructure/api';
 
-(async () => {
-  console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
+const loadConfig = async (initialRepositoryName, destinyRepositoryName, logger, filename) => {
+  const funcName = loadConfig.name;
+  logger.info(`${MODULE_NAME}:${funcName} (IN) --> filename: ${filename}}`);
 
-  // Loading environment variables
-  const configSource = process.env.NODE_CONFIG_SOURCE_APP;
-  console.log(`NODE_CONFIG_SOURCE: ${configSource}`);
-  // const configSpringCfg = process.env.NODE_CONFIG_SPRINGCFG_ENDPOINT;
-  const configFile = process.env.NODE_CONFIG_FILE;
-  console.log(`NODE_CONFIG_FILE: ${configFile}`);
-  const configPort = process.env.NODE_CONFIG_PORT_APP;
-  console.log(`NODE_CONFIG_PORT: ${configPort}`);
-  const apiDoc = process.env.NODE_CONFIG_APIFILE;
-  console.log(`NODE_CONFIG_APIFILE: ${apiDoc}`);
+  const loadConfigAdapterController = container.get('loadConfigAdapterController');
+  const initialRepository = container.get(initialRepositoryName);
+  const destinyRepository = container.get(destinyRepositoryName);
+  const presenter = container.get('configJSONPresenter');
 
-  // Init Container
-  container.init();
-  console.log(`${MODULE_NAME} (MID) --> Container initialized OK`);
-  // Init logger
-  container.getLogger().init({ level: 'debug' });
-  const logger = container.getLogger();
-  logger.debug(`${MODULE_NAME} (MID) --> logger initialized OK`);
+  await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename);
+  logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
+};
 
-  // Load Configuration
+const loadEnvVars = () => {
+  const funcName = loadEnvVars.name;
+  console.log(`${MODULE_NAME}${funcName} (IN) --> no params`);
 
-  if (YAML_FILE === configSource) {
-    // Load configuration from file and set in memory
-    const config = await container.getFileConfigRepository().getConfig(configFile);
-    logger.debug(`${MODULE_NAME} (MID) --> config loaded: ${JSON.stringify(config)}`);
-    await container.getContainerConfigRepository().setConfig(config);
-    logger.debug(`${MODULE_NAME} (MID) --> config stored in ContainerRepository`);
+  const result = {
+    configSource: process.env.NODE_CONFIG_SOURCE_APP,
+    configFileName: process.env.NODE_CONFIG_FILE,
+    configPort: process.env.NODE_CONFIG_PORT_APP,
+    apiDoc: process.env.NODE_CONFIG_APIFILE,
+    configSpringCfg: process.env.NODE_CONFIG_SPRINGCFG_ENDPOINT,
+  };
+
+  console.log(`${MODULE_NAME}${funcName} (OUT) --> result: ${JSON.stringify(result)}`);
+
+  return result;
+};
+
+const initConfig = async (envVars, logger) => {
+  // Init Configuration
+  if (YAML_FILE === envVars.configSource) {
+    const initialRepositoryName = 'fileConfigRepository';
+    const destinyRepositoryName = 'containerConfigRepository';
+    await loadConfig(initialRepositoryName, destinyRepositoryName, logger, envVars.configFileName);
   } else {
     logger.error(`${MODULE_NAME} (ERROR) --> config source not valid!`);
     throw new Error('Config Source not valid!');
   }
+};
+
+(async () => {
+  console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
+
+  // Init Environment Variables
+  const envVars = loadEnvVars();
+
+  // Init Container
+  container.init();
+  console.log(`${MODULE_NAME} (MID) --> Container initialized OK`);
+
+  // Init logger
+  const logger = container.getLogger();
+  container.getLogger().init({ level: 'debug' });
+  logger.debug(`${MODULE_NAME} (MID) --> Logger initialized OK`);
+
+  // Init Configuration
+  await initConfig(envVars, logger);
+  logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK`);
 
   // Init server & start
-  apiserver.start({ port: configPort, apiDocument: `${APIDOC_BASEPATH}/${apiDoc}`, serverTimeout: 50000 });
+  apiserver.start({ port: envVars.configPort, apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`, serverTimeout: 50000 });
 })();

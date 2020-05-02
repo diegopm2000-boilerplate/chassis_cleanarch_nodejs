@@ -4,7 +4,7 @@ const container = require('../../container/container');
 
 const MODULE_NAME = '[HealtchCheckController]';
 
-exports.check = (req, res) => {
+exports.execute = (req, res) => {
   container.getLogger().info(`${MODULE_NAME} (IN) --> no params`);
 
   const result = { message: 'OK' };

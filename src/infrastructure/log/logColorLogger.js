@@ -21,7 +21,7 @@ exports.warning = (message) => {
 };
 
 exports.info = (message) => {
-  logger.info(message);
+  logger.info(` ${message}`);
 };
 
 exports.debug = (message) => {

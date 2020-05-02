@@ -35,8 +35,8 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
         'application/json': bodyParser.json(),
       },
       operations: {
-        check: container.getHealthcheckController().check,
-        getConfig: container.getConfigController().getConfig,
+        check: container.get('healthcheckController').execute,
+        getConfig: container.get('getConfigController').execute,
       },
     });
 

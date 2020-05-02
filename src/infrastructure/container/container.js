@@ -10,42 +10,29 @@ const moduleStore = {};
 // Config store
 let configStore = {};
 
-exports.set = (name, pathfile) => {
+const set = (name, pathfile) => {
   moduleStore[name] = require(pathfile);
 };
 
-exports.get = (name) => moduleStore[name];
+exports.get = (nameModule) => moduleStore[nameModule];
 
 exports.init = () => {
   // Logger
-  exports.set('logger', '../log/logColorLogger');
+  set('logger', '../log/logColorLogger');
   // Infrastructure Controllers (OpenApi Express Controllers)
-  exports.set('healthcheckController', '../server/controller/healthcheckController');
-  exports.set('configController', '../../infrastructure/server/controller/configController');
+  set('healthcheckController', '../server/controller/healthcheckController');
+  set('getConfigController', '../../infrastructure/server/controller/getConfigController');
   // Infrastructure Repositories
-  exports.set('fileConfigRepository', '../repository/fileConfigRepository');
-  exports.set('memConfigRepository', '../repository/memConfigRepository');
-  exports.set('containerConfigRepository', '../repository/containerConfigRepository');
+  set('fileConfigRepository', '../repository/fileConfigRepository');
+  set('memConfigRepository', '../repository/memConfigRepository');
+  set('containerConfigRepository', '../repository/containerConfigRepository');
   // Adapter Interface Components
-  exports.set('configAdapterController', '../../adapter/controller/configAdapterController');
-  exports.set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
+  set('loadConfigAdapterController', '../../adapter/controller/loadConfigAdapterController');
+  set('getConfigAdapterController', '../../adapter/controller/getConfigAdapterController');
+  set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
 };
 
 exports.getLogger = () => exports.get('logger');
-
-exports.getHealthcheckController = () => exports.get('healthcheckController');
-
-exports.getConfigController = () => exports.get('configController');
-
-exports.getFileConfigRepository = () => exports.get('fileConfigRepository');
-
-exports.getMemConfigRepository = () => exports.get('memConfigRepository');
-
-exports.getContainerConfigRepository = () => exports.get('containerConfigRepository');
-
-exports.getConfigAdapterController = () => exports.get('configAdapterController');
-
-exports.getConfigJSONPresenter = () => exports.get('configJSONPresenter');
 
 exports.getConfig = () => configStore;
 

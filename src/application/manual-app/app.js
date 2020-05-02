@@ -10,8 +10,8 @@ const log = require('../../infrastructure/log/logColorLogger');
 
 // Interface Adapters
 
-const configAdapterController = require('../../adapter/controller/configAdapterController');
-const cachedConfigAdapterController = require('../../adapter/controller/cachedConfigAdapterController');
+const loadConfigAdapterController = require('../../adapter/controller/loadConfigAdapterController');
+const getConfigAdapterController = require('../../adapter/controller/getConfigAdapterController');
 const configJSONPresenter = require('../../adapter/presenter/configJSONPresenter');
 const configYAMLPresenter = require('../../adapter/presenter/configYAMLPresenter');
 
@@ -19,21 +19,11 @@ const configYAMLPresenter = require('../../adapter/presenter/configYAMLPresenter
 
 // Execution
 
-function getConfigInJSON() {
-  return configAdapterController.getConfig(fileConfigRepository, configJSONPresenter, log, 'chassis.yml');
-}
+const loadConfig = async () => loadConfigAdapterController.execute(fileConfigRepository, memConfigRepository, configJSONPresenter, log, 'chassis.yaml');
 
-function getConfigInYAML() {
-  return configAdapterController.getConfig(fileConfigRepository, configYAMLPresenter, log, 'chassis.yml');
-}
+const getConfigInJSON = () => getConfigAdapterController.execute(fileConfigRepository, configJSONPresenter, log, 'chassis.yaml');
 
-function getCachedConfig() {
-  return cachedConfigAdapterController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, log, 'chassis.yml');
-}
-
-function getCachedConfigWithRefresh() {
-  return cachedConfigAdapterController.getCachedConfig(memConfigRepository, fileConfigRepository, configJSONPresenter, log, 'chassis.yml', true);
-}
+const getConfigInYAML = () => getConfigAdapterController.execute(fileConfigRepository, configYAMLPresenter, log, 'chassis.yaml');
 
 (async () => {
   let result;
@@ -41,15 +31,10 @@ function getCachedConfigWithRefresh() {
   // Init logger
   log.init({ level: 'debug' });
 
-  result = await getConfigInJSON();
-  log.debug(`result: ${JSON.stringify(result)}`);
-  result = await getConfigInYAML();
-  log.debug(`result: ${JSON.stringify(result)}`);
+  await loadConfig();
 
-  result = await getCachedConfig();
-  log.debug(`result: ${JSON.stringify(result)}`);
-  result = await getCachedConfigWithRefresh();
-  log.debug(`result: ${JSON.stringify(result)}`);
-  result = await getCachedConfig();
-  log.debug(`result: ${JSON.stringify(result)}`);
+  result = await getConfigInJSON();
+  log.debug(`result in JSON: ${JSON.stringify(result)}`);
+  result = await getConfigInYAML();
+  log.debug(`result in YAML: ${JSON.stringify(result)}`);
 })();
