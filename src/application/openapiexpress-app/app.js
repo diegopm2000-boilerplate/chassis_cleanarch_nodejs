@@ -8,20 +8,22 @@ const apiserver = require('../../infrastructure/server/openapiexpress');
 
 const MODULE_NAME = '[App]';
 
+// Config sources
 const YAML_FILE = 'YAML_FILE';
+const GIT = 'GIT';
 
 const APIDOC_BASEPATH = './src/infrastructure/api';
 
-const loadConfig = async (initialRepositoryName, destinyRepositoryName, logger, filename) => {
+const loadConfig = async (initialRepositoryName, destinyRepositoryName, logger, filename, endpoint) => {
   const funcName = loadConfig.name;
-  logger.info(`${MODULE_NAME}:${funcName} (IN) --> filename: ${filename}}`);
+  logger.info(`${MODULE_NAME}:${funcName} (IN) --> filename: ${filename}, endpoint: ${endpoint}`);
 
   const loadConfigAdapterController = container.get('loadConfigAdapterController');
   const initialRepository = container.get(initialRepositoryName);
   const destinyRepository = container.get(destinyRepositoryName);
   const presenter = container.get('configJSONPresenter');
 
-  await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename);
+  await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
   logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
 };
 
@@ -43,13 +45,21 @@ const loadEnvVars = () => {
 };
 
 const initConfig = async (envVars, logger) => {
-  // TODO load config from springcloudconfig (remote repository)
+  if (envVars.configSource) {
+    let initialRepositoryName;
+    let endpoint;
+    if (YAML_FILE === envVars.configSource) {
+      initialRepositoryName = 'fileConfigRepository';
+    } else if (GIT === envVars.configSource) {
+      console.log('Entrando por GIT');
+      initialRepositoryName = 'remoteConfigRepository';
+      endpoint = envVars.configSpringCfg;
+    } else {
+      throw new Error('Config Source not valid!');
+    }
 
-  // Init Configuration
-  if (YAML_FILE === envVars.configSource) {
-    const initialRepositoryName = 'fileConfigRepository';
     const destinyRepositoryName = 'containerConfigRepository';
-    await loadConfig(initialRepositoryName, destinyRepositoryName, logger, envVars.configFileName);
+    await loadConfig(initialRepositoryName, destinyRepositoryName, logger, envVars.configFileName, endpoint);
   } else {
     logger.error(`${MODULE_NAME} (ERROR) --> config source not valid!`);
     throw new Error('Config Source not valid!');

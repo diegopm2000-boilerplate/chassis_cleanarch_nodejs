@@ -11,7 +11,7 @@ export NODE_CONFIG_SPRINGCFG_ENDPOINT="http://localhost:8888"
 env | grep '^NODE_CONFIG_SPRINGCFG_ENDPOINT='
 
 # Configuration File
-export NODE_CONFIG_FILE="chassis.yml"
+export NODE_CONFIG_FILE="chassis-dev.json"
 env | grep '^NODE_CONFIG_FILE='
 
 # App Port
@@ -19,5 +19,5 @@ export NODE_CONFIG_PORT_APP="8080"
 env | grep '^NODE_CONFIG_PORT_APP='
 
 # Api File
-export NODE_CONFIG_APIFILE="openapi.yml"
+export NODE_CONFIG_APIFILE="openapi.yaml"
 env | grep '^NODE_CONFIG_APIFILE='

@@ -3,4 +3,4 @@ app:
   description: Chassis using Clean Architecture in NodeJS
   environment: dev
 log:
-  level: debug # modes available orderer by magnitude: alert, critical, error, warning, notice, info, debug
+  level: debug # modes available orderer by magnitude: error, warning, info, debug

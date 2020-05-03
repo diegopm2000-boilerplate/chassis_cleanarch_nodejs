@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+
+  chassis-springcfgserver:
+    image: diegopm2000/springcloudconfigserver
+    container_name: chassis-springcfgserver
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/diegopm2000-boilerplate/chassis_config.git
+  
