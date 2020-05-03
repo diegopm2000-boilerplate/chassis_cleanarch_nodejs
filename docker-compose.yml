@@ -9,4 +9,28 @@ services:
       - "8888:8888"
     environment:
       - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/diegopm2000-boilerplate/chassis_config.git
+    networks:
+      - chassis-network
+
+  chassis-nodejs-cleanarch:
+    build: .
+    image: chassis-nodejs-cleanarch
+    container_name: chassis-nodejs-cleanarch
+    ports:
+      - "8080:8080"    
+    environment:
+      - NODE_CONFIG_SOURCE_APP=GIT
+      - NODE_CONFIG_SPRINGCFG_ENDPOINT=http://chassis-springcfgserver:8888
+      - NODE_CONFIG_FILE=chassis-dev.yaml
+      - NODE_CONFIG_PORT_APP=8080
+    command: npm start
+    networks:
+      - chassis-network
+    depends_on:
+      - chassis-springcfgserver
+
+networks:
+  chassis-network:
+    name: chassis-network
+    driver: bridge
   

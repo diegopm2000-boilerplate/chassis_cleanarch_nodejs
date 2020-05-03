@@ -67,24 +67,29 @@ const initConfig = async (envVars, logger) => {
 };
 
 (async () => {
-  console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
+  let logger;
+  try {
+    console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
 
-  // Init Environment Variables
-  const envVars = loadEnvVars();
+    // Init Environment Variables
+    const envVars = loadEnvVars();
 
-  // Init Container
-  container.init();
-  console.log(`${MODULE_NAME} (MID) --> Container initialized OK`);
+    // Init Container
+    container.init();
+    console.log(`${MODULE_NAME} (MID) --> Container initialized OK`);
 
-  // Init logger
-  const logger = container.getLogger();
-  container.getLogger().init({ level: 'debug' });
-  logger.debug(`${MODULE_NAME} (MID) --> Logger initialized OK`);
+    // Init logger
+    logger = container.getLogger();
+    container.getLogger().init({ level: 'debug' });
+    logger.debug(`${MODULE_NAME} (MID) --> Logger initialized OK`);
 
-  // Init Configuration
-  await initConfig(envVars, logger);
-  logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK`);
+    // Init Configuration
+    await initConfig(envVars, logger);
+    logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK`);
 
-  // Init server & start
-  apiserver.start({ port: envVars.configPort, apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`, serverTimeout: 50000 });
+    // Init server & start
+    apiserver.start({ port: envVars.configPort, apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`, serverTimeout: 50000 });
+  } catch (error) {
+    logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);
+  }
 })();
