@@ -6,6 +6,10 @@ const container = require('../../infrastructure/container/container');
 
 const apiserver = require('../../infrastructure/server/openapiexpress');
 
+// //////////////////////////////////////////////////////////////////////////////
+// Constants & Properties
+// //////////////////////////////////////////////////////////////////////////////
+
 const MODULE_NAME = '[App]';
 
 // Config sources
@@ -14,18 +18,9 @@ const GIT = 'GIT';
 
 const APIDOC_BASEPATH = './src/infrastructure/api';
 
-const loadConfig = async (initialRepositoryName, destinyRepositoryName, logger, filename, endpoint) => {
-  const funcName = loadConfig.name;
-  logger.info(`${MODULE_NAME}:${funcName} (IN) --> filename: ${filename}, endpoint: ${endpoint}`);
-
-  const loadConfigAdapterController = container.get('loadConfigAdapterController');
-  const initialRepository = container.get(initialRepositoryName);
-  const destinyRepository = container.get(destinyRepositoryName);
-  const presenter = container.get('configJSONPresenter');
-
-  await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
-  logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
-};
+// //////////////////////////////////////////////////////////////////////////////
+// Private Functions
+// //////////////////////////////////////////////////////////////////////////////
 
 const loadEnvVars = () => {
   const funcName = loadEnvVars.name;
@@ -42,6 +37,19 @@ const loadEnvVars = () => {
   console.log(`${MODULE_NAME}${funcName} (OUT) --> result: ${JSON.stringify(result)}`);
 
   return result;
+};
+
+const loadConfig = async (initialRepositoryName, destinyRepositoryName, logger, filename, endpoint) => {
+  const funcName = loadConfig.name;
+  logger.info(`${MODULE_NAME}:${funcName} (IN) --> filename: ${filename}, endpoint: ${endpoint}`);
+
+  const loadConfigAdapterController = container.get('loadConfigAdapterController');
+  const initialRepository = container.get(initialRepositoryName);
+  const destinyRepository = container.get(destinyRepositoryName);
+  const presenter = container.get('configJSONPresenter');
+
+  await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
+  logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
 };
 
 const initConfig = async (envVars, logger) => {
@@ -65,6 +73,20 @@ const initConfig = async (envVars, logger) => {
     throw new Error('Config Source not valid!');
   }
 };
+
+// //////////////////////////////////////////////////////////////////////////////
+// Unhandled Rejection Handler
+// //////////////////////////////////////////////////////////////////////////////
+
+process.on('unhandledRejection', (err, p) => {
+  container.getLogger().error(`${MODULE_NAME} (ERROR) --> An unhandledRejection occurred...`);
+  container.getLogger().error(`${MODULE_NAME} (ERROR) --> Rejected Promise: ${p}`);
+  container.getLogger().error(`${MODULE_NAME} (ERROR) --> Rejection: ${err.stack}`);
+});
+
+// //////////////////////////////////////////////////////////////////////////////
+// IIFE Functions
+// //////////////////////////////////////////////////////////////////////////////
 
 (async () => {
   let logger;
