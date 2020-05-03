@@ -17,13 +17,15 @@ const configYAMLPresenter = require('../../adapter/presenter/configYAMLPresenter
 
 // Init
 
+const configfilename = 'chassis-dev.yaml';
+
 // Execution
 
-const loadConfig = async () => loadConfigAdapterController.execute(fileConfigRepository, memConfigRepository, configJSONPresenter, log, 'chassis.yaml');
+const loadConfig = async () => loadConfigAdapterController.execute(fileConfigRepository, memConfigRepository, configJSONPresenter, log, configfilename);
 
-const getConfigInJSON = () => getConfigAdapterController.execute(fileConfigRepository, configJSONPresenter, log, 'chassis.yaml');
+const getConfigInJSON = () => getConfigAdapterController.execute(fileConfigRepository, configJSONPresenter, log, configfilename);
 
-const getConfigInYAML = () => getConfigAdapterController.execute(fileConfigRepository, configYAMLPresenter, log, 'chassis.yaml');
+const getConfigInYAML = () => getConfigAdapterController.execute(fileConfigRepository, configYAMLPresenter, log, configfilename);
 
 (async () => {
   let result;
