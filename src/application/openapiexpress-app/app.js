@@ -49,15 +49,8 @@ const initConfig = async (envVars, logger) => {
     throw new Error(msgError);
   }
 
-  let initialRepositoryName;
-  let endpoint;
-
-  if (YAML_FILE === envVars.configSource) {
-    initialRepositoryName = 'fileConfigRepository';
-  } else {
-    initialRepositoryName = 'remoteConfigRepository';
-    endpoint = envVars.configSpringCfg;
-  }
+  const endpoint = envVars.configSpringCfg;
+  const initialRepositoryName = (YAML_FILE === envVars.configSource) ? 'fileConfigRepository' : 'remoteConfigRepository';
 
   const filename = envVars.configFileName;
   const loadConfigAdapterController = container.get('loadConfigAdapterController');
