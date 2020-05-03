@@ -59,7 +59,6 @@ const initConfig = async (envVars, logger) => {
     if (YAML_FILE === envVars.configSource) {
       initialRepositoryName = 'fileConfigRepository';
     } else if (GIT === envVars.configSource) {
-      console.log('Entrando por GIT');
       initialRepositoryName = 'remoteConfigRepository';
       endpoint = envVars.configSpringCfg;
     } else {
