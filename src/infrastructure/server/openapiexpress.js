@@ -25,8 +25,6 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     const appPort = port || DEFAULT_PORT;
     module.exports.server = app.listen(appPort);
 
-    // TODO refactor the extraction of controller methods!!!
-
     // Initialize ExpressOpenApi
     expressOpenapi.initialize({
       app,

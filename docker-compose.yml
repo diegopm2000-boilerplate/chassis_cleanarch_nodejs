@@ -23,6 +23,7 @@ services:
       - NODE_CONFIG_SPRINGCFG_ENDPOINT=http://chassis-springcfgserver:8888
       - NODE_CONFIG_FILE=chassis-dev.yaml
       - NODE_CONFIG_PORT_APP=8080
+      - NODE_CONFIG_APIFILE=openapi.yaml
     command: npm start
     networks:
       - chassis-network
