@@ -39,38 +39,34 @@ const loadEnvVars = () => {
   return result;
 };
 
-const loadConfig = async (initialRepositoryName, destinyRepositoryName, logger, filename, endpoint) => {
-  const funcName = loadConfig.name;
-  logger.info(`${MODULE_NAME}:${funcName} (IN) --> filename: ${filename}, endpoint: ${endpoint}`);
+const initConfig = async (envVars, logger) => {
+  const funcName = initConfig.name;
+  logger.info(`${MODULE_NAME}:${funcName} (IN) --> envVars: ${JSON.stringify(envVars)}`);
 
+  if (envVars.configSource !== YAML_FILE && envVars.configSource !== GIT) {
+    const msgError = 'Config Source not valid';
+    logger.error(`${MODULE_NAME}:${funcName} (ERROR) --> error.message: ${msgError}`);
+    throw new Error(msgError);
+  }
+
+  let initialRepositoryName;
+  let endpoint;
+
+  if (YAML_FILE === envVars.configSource) {
+    initialRepositoryName = 'fileConfigRepository';
+  } else {
+    initialRepositoryName = 'remoteConfigRepository';
+    endpoint = envVars.configSpringCfg;
+  }
+
+  const filename = envVars.configFileName;
   const loadConfigAdapterController = container.get('loadConfigAdapterController');
   const initialRepository = container.get(initialRepositoryName);
-  const destinyRepository = container.get(destinyRepositoryName);
+  const destinyRepository = container.get('containerConfigRepository');
   const presenter = container.get('configJSONPresenter');
 
   await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
   logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
-};
-
-const initConfig = async (envVars, logger) => {
-  if (envVars.configSource) {
-    let initialRepositoryName;
-    let endpoint;
-    if (YAML_FILE === envVars.configSource) {
-      initialRepositoryName = 'fileConfigRepository';
-    } else if (GIT === envVars.configSource) {
-      initialRepositoryName = 'remoteConfigRepository';
-      endpoint = envVars.configSpringCfg;
-    } else {
-      throw new Error('Config Source not valid!');
-    }
-
-    const destinyRepositoryName = 'containerConfigRepository';
-    await loadConfig(initialRepositoryName, destinyRepositoryName, logger, envVars.configFileName, endpoint);
-  } else {
-    logger.error(`${MODULE_NAME} (ERROR) --> config source not valid!`);
-    throw new Error('Config Source not valid!');
-  }
 };
 
 // //////////////////////////////////////////////////////////////////////////////
