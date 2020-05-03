@@ -1,3 +1,3 @@
 # chassis_cleanarch_nodejs
 
-Chassis for backend Applications using Clean Architecture and NodeJS
+Chassis for NodeJS backend Applications using Clean Architecture

@@ -4,16 +4,21 @@
   "description": "Chassis for NodeJS using Clean Architecture",
   "main": "index.js",
   "scripts": {
+    "lint": "node_modules/.bin/eslint 'src/**/*.js'",
     "start-manual": "node src/application/manual-app/app.js",
     "start": "node src/application/openapiexpress-app/app.js",
-    "lint": "node_modules/.bin/eslint 'src/**/*.js'"
+    "test": "node ./node_modules/mocha/bin/mocha --recursive --timeout 20000 --reporter spec --exit",
+    "coverage": "nyc --reporter=text --reporter=lcov npm test"
   },
   "author": "Diego Perez Molinero",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2"
+    "eslint-plugin-import": "^2.20.2",
+    "mocha": "^7.1.2",
+    "nyc": "^15.0.1"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -25,5 +30,12 @@
     "swagger-ui-express": "^4.1.4",
     "yaml": "^1.9.2",
     "yamljs": "^0.3.0"
+  },
+  "nyc": {
+    "all": true,
+    "check-coverage": true,
+    "include": [
+      "src/**/*.js"
+    ]
   }
 }
