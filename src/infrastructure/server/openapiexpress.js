@@ -58,6 +58,15 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
 
     container.getLogger().info(`${MODULE_NAME} (OUT) --> App Server started at port: ${appPort} and Running OK!`);
 
+    // TODO
+    // falta soporte CORS
+
+    // TODO
+    // falta securización API (Helm)
+
+    // TODO
+    // falta privatización API
+
     resolve(true);
   } catch (error) {
     container.logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);

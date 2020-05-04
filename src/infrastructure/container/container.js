@@ -31,6 +31,7 @@ exports.init = () => {
   set('loadConfigAdapterController', '../../adapter/controller/loadConfigAdapterController');
   set('getConfigAdapterController', '../../adapter/controller/getConfigAdapterController');
   set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
+  set('configYAMLPresenter', '../../adapter/presenter/configYAMLPresenter');
 };
 
 exports.getLogger = () => exports.get('logger');
