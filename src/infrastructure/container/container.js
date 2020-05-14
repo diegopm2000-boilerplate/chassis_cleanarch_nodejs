@@ -24,7 +24,6 @@ exports.init = () => {
   // Infrastructure Repositories
   set('fileConfigRepository', '../repository/fileConfigRepository');
   set('remoteConfigRepository', '../repository/remoteConfigRepository');
-  set('memConfigRepository', '../repository/memConfigRepository');
   set('containerConfigRepository', '../repository/containerConfigRepository');
   // Adapter Interface Components
   // -- Presenters

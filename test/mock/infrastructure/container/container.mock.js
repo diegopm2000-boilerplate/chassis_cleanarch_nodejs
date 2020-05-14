@@ -23,9 +23,8 @@ exports.init = () => {
   set('healthcheckController', '../../infrastructure/server/controller/healthcheckController.mock');
   set('getConfigController', '../../infrastructure/server/controller/getConfigController.mock');
   // Infrastructure Repositories
-  // set('fileConfigRepository', '../repository/fileConfigRepository');
-  // set('remoteConfigRepository', '../repository/remoteConfigRepository');
-  // set('memConfigRepository', '../repository/memConfigRepository');
+  set('fileConfigRepository', '../repository/configRepository.mock');
+  set('remoteConfigRepository', '../repository/configRepository.mock');
   set('containerConfigRepository', '../repository/configRepository.mock');
   // Adapter Interface Components
   // -- presenters
