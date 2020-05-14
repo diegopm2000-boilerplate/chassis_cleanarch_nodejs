@@ -40,7 +40,6 @@ const loadEnvVars = () => {
 };
 
 const initConfig = async (envVars, logger) => {
-  console.log('Entrando en initConfig');
   const funcName = initConfig.name;
   logger.info(`${MODULE_NAME}:${funcName} (IN) --> envVars: ${JSON.stringify(envVars)}`);
 
@@ -50,17 +49,11 @@ const initConfig = async (envVars, logger) => {
     throw new Error(msgError);
   }
 
-  console.log('Hasta aquí sin fallo!');
-
   const endpoint = envVars.configSpringCfg;
   const initialRepositoryName = (YAML_FILE === envVars.configSource) ? 'fileConfigRepository' : 'remoteConfigRepository';
-
-  console.log(`initialRepositoryName: ${initialRepositoryName}`);
-
   const filename = envVars.configFileName;
   const loadConfigAdapterController = container.get('loadConfigAdapterController');
-  
-  console.log(' a ver');
+
   const initialRepository = container.get(initialRepositoryName);
   const destinyRepository = container.get('containerConfigRepository');
   const presenter = container.get('configJSONPresenter');
@@ -82,10 +75,10 @@ process.on('unhandledRejection', (err, p) => {
 });
 
 // //////////////////////////////////////////////////////////////////////////////
-// IIFE Functions
+// Init
 // //////////////////////////////////////////////////////////////////////////////
 
-(async () => {
+exports.init = async () => {
   let logger;
   try {
     console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
@@ -108,7 +101,11 @@ process.on('unhandledRejection', (err, p) => {
 
     // Init server & start
     apiserver.start({ port: envVars.configPort, apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`, serverTimeout: 50000 });
+    return true;
   } catch (error) {
     logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);
+    return false;
   }
-})();
+};
+
+require('make-runnable');
