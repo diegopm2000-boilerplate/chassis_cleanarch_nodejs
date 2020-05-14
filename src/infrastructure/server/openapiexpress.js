@@ -17,6 +17,7 @@ const DEFAULT_SOCKET_TIMEOUT = 300000;
 
 let server;
 
+// TODO mejorar este error...si falla la ruta, pues da que res.status no es una funcion
 const errorHandler = (err, req, res) => {
   container.getLogger().error(`${MODULE_NAME} (ERROR) --> error: ${err.stack}`);
   res.status(err.status).json(err);

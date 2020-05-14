@@ -1,5 +1,7 @@
 // memConfigRepository.js
 
+// TODO se está usando este memConfigRepository ???
+
 let config = {};
 
 exports.getConfig = () => new Promise((resolve) => {

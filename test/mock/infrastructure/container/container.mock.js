@@ -28,10 +28,12 @@ exports.init = () => {
   // set('memConfigRepository', '../repository/memConfigRepository');
   set('containerConfigRepository', '../repository/configRepository.mock');
   // Adapter Interface Components
-  set('loadConfigAdapterController', '../../adapter/controller/loadConfigAdapterController.mock');
-  set('getConfigAdapterController', '../../adapter/controller/getConfigAdapterController.mock');
+  // -- presenters
   set('configJSONPresenter', '../../adapter/presenter/presenter.mock');
   // set('configYAMLPresenter', '../../adapter/presenter/configYAMLPresenter');
+  // UseCases
+  set('loadConfigUC', '../../usecase/loadConfigUC.mock');
+  set('getConfigUC', '../../usecase/getConfigUC.mock');
 };
 
 exports.init();

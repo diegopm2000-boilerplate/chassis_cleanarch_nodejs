@@ -52,13 +52,15 @@ const initConfig = async (envVars, logger) => {
   const endpoint = envVars.configSpringCfg;
   const initialRepositoryName = (YAML_FILE === envVars.configSource) ? 'fileConfigRepository' : 'remoteConfigRepository';
   const filename = envVars.configFileName;
-  const loadConfigAdapterController = container.get('loadConfigAdapterController');
+  const loadConfigUC = container.get('loadConfigUC');
+
+  console.log(`---> loadConfigUC: ${loadConfigUC}`);
 
   const initialRepository = container.get(initialRepositoryName);
   const destinyRepository = container.get('containerConfigRepository');
   const presenter = container.get('configJSONPresenter');
 
-  await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
+  await loadConfigUC.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
   logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
 
   return true;

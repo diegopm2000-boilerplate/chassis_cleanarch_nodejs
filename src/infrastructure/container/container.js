@@ -3,8 +3,6 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 
-// const a = require('../memory/memConfigRepository');
-
 // Module store
 const moduleStore = {};
 // Config store
@@ -16,6 +14,7 @@ const set = (name, pathfile) => {
 
 exports.get = (nameModule) => moduleStore[nameModule];
 
+// TODO pasar esto a un array de objetos y llamar a set con cada valor!!!
 exports.init = () => {
   // Logger
   set('logger', '../log/logColorLogger');
@@ -28,10 +27,12 @@ exports.init = () => {
   set('memConfigRepository', '../repository/memConfigRepository');
   set('containerConfigRepository', '../repository/containerConfigRepository');
   // Adapter Interface Components
-  set('loadConfigAdapterController', '../../adapter/controller/loadConfigAdapterController');
-  set('getConfigAdapterController', '../../adapter/controller/getConfigAdapterController');
+  // -- Presenters
   set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
   set('configYAMLPresenter', '../../adapter/presenter/configYAMLPresenter');
+  // Use Cases
+  set('getConfigUC', '../../usecase/getConfigUC');
+  set('loadConfigUC', '../../usecase/loadConfigUC');
 };
 
 exports.getLogger = () => exports.get('logger');
