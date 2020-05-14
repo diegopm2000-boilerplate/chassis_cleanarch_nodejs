@@ -62,6 +62,27 @@ describe('ConsoleLogger Infra - Tests', () => {
     });
   });
 
+  describe('warning - Successfully CASE', () => {
+    let mySpy;
+
+    before((done) => {
+      mySpy = sinon.stub(console, 'warn');
+      done();
+    });
+
+    after((done) => {
+      mySpy.restore();
+      done();
+    });
+
+    it('warning - Successfully CASE', () => {
+      // Launch Operation
+      consoleLogger.warning('message');
+      // Check
+      assert(mySpy.calledWith('message'));
+    });
+  });
+
   describe('error - Successfully CASE', () => {
     let mySpy;
 

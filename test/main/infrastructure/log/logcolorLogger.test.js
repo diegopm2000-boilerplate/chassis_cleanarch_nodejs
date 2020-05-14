@@ -106,6 +106,52 @@ describe('LogColor Logger Infra - Tests', () => {
       assert(mySpy.calledWith(` ${expectedOptionsInnerCall}`));
     });
   });
+  describe('info - Successfully CASE', () => {
+    let mySpy;
+
+    before((done) => {
+      mySpy = sinon.spy(LogColorMock.prototype, 'info');
+      done();
+    });
+
+    after((done) => {
+      mySpy.restore();
+      done();
+    });
+    it('info - Successfully CASE', () => {
+      // In params
+      const message = 'test message';
+      // Expected Options in call
+      const expectedOptionsInnerCall = message;
+      // Launch op
+      logColorLogger.info(message);
+      // Check
+      assert(mySpy.calledWith(` ${expectedOptionsInnerCall}`));
+    });
+  });
+  describe('warning - Successfully CASE', () => {
+    let mySpy;
+
+    before((done) => {
+      mySpy = sinon.spy(LogColorMock.prototype, 'warning');
+      done();
+    });
+
+    after((done) => {
+      mySpy.restore();
+      done();
+    });
+    it('warning - Successfully CASE', () => {
+      // In params
+      const message = 'test message';
+      // Expected Options in call
+      const expectedOptionsInnerCall = message;
+      // Launch op
+      logColorLogger.warning(message);
+      // Check
+      assert(mySpy.calledWith(`${expectedOptionsInnerCall}`));
+    });
+  });
   describe('error - Successfully CASE', () => {
     let mySpy;
 

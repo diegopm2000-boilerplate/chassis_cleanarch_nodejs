@@ -18,6 +18,10 @@ class LogColorMock {
 
   }
 
+  warning(text) {
+
+  }
+
   error(text) {
 
   }
