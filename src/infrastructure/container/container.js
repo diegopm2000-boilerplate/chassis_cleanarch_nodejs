@@ -8,30 +8,32 @@ const moduleStore = {};
 // Config store
 let configStore = {};
 
-const set = (name, pathfile) => {
+const set = ({ name, pathfile }) => {
   moduleStore[name] = require(pathfile);
 };
 
 exports.get = (nameModule) => moduleStore[nameModule];
 
-// TODO pasar esto a un array de objetos y llamar a set con cada valor!!!
-exports.init = () => {
+const arrayObj = [
   // Logger
-  set('logger', '../log/logColorLogger');
+  { name: 'logger', pathfile: '../log/logColorLogger' },
   // Infrastructure Controllers (OpenApi Express Controllers)
-  set('healthcheckController', '../server/controller/healthcheckController');
-  set('getConfigController', '../../infrastructure/server/controller/getConfigController');
+  { name: 'healthcheckController', pathfile: '../server/controller/healthcheckController' },
+  { name: 'getConfigController', pathfile: '../../infrastructure/server/controller/getConfigController' },
   // Infrastructure Repositories
-  set('fileConfigRepository', '../repository/fileConfigRepository');
-  set('remoteConfigRepository', '../repository/remoteConfigRepository');
-  set('containerConfigRepository', '../repository/containerConfigRepository');
-  // Adapter Interface Components
-  // -- Presenters
-  set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter');
-  set('configYAMLPresenter', '../../adapter/presenter/configYAMLPresenter');
+  { name: 'fileConfigRepository', pathfile: '../repository/fileConfigRepository' },
+  { name: 'remoteConfigRepository', pathfile: '../repository/remoteConfigRepository' },
+  { name: 'containerConfigRepository', pathfile: '../repository/containerConfigRepository' },
+  // Adapter Interface Components -- Presenters
+  { name: 'configJSONPresenter', pathfile: '../../adapter/presenter/configJSONPresenter' },
+  { name: 'configYAMLPresenter', pathfile: '../../adapter/presenter/configYAMLPresenter' },
   // Use Cases
-  set('getConfigUC', '../../usecase/getConfigUC');
-  set('loadConfigUC', '../../usecase/loadConfigUC');
+  { name: 'getConfigUC', pathfile: '../../usecase/getConfigUC' },
+  { name: 'loadConfigUC', pathfile: '../../usecase/loadConfigUC' },
+];
+
+exports.init = () => {
+  arrayObj.forEach((x) => set(x));
 };
 
 exports.getLogger = () => exports.get('logger');

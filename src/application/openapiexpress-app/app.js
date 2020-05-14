@@ -54,8 +54,6 @@ const initConfig = async (envVars, logger) => {
   const filename = envVars.configFileName;
   const loadConfigUC = container.get('loadConfigUC');
 
-  console.log(`---> loadConfigUC: ${loadConfigUC}`);
-
   const initialRepository = container.get(initialRepositoryName);
   const destinyRepository = container.get('containerConfigRepository');
   const presenter = container.get('configJSONPresenter');

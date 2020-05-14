@@ -21,6 +21,15 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 message: 'OK'
+        "500":
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InnerErrorResponse'
+              example:
+                code: 500
+                message: Internal Error
   
   /config:
     get:
@@ -37,6 +46,15 @@ paths:
                 $ref: '#/components/schemas/ObjectResponse'
               example:
                 message: 'OK'
+        "500":
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InnerErrorResponse'
+              example:
+                code: 500
+                message: Internal Error
 
 servers:
   - url: /api
@@ -61,6 +79,4 @@ components:
         code:
           type: number
         message:
-          type: string
-        description:
           type: string

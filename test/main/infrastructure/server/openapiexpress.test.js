@@ -19,6 +19,7 @@ const containerMock = require('../../../mock/infrastructure/container/container.
 // Set the container Mock
 openapiexpress.__set__('container', containerMock);
 const errorHandler = openapiexpress.__get__('errorHandler');
+const routeNotFoundErrorHandler = openapiexpress.__get__('routeNotFoundErrorHandler');
 
 const defaultTimeOut = 20; // timeout in miliseconds
 
@@ -126,19 +127,48 @@ describe('OpenApiExpress - Tests', () => {
     it('errorHandler - Successfully CASE', () => {
       // IN params
       const err = {
-        status: 401,
+        status: 500,
         stack: 'stack created for testing...',
+        message: 'Internal Error',
       };
       const req = new MockExpressRequest();
       const res = new MockExpressResponse();
-      // eslint-disable-next-line func-names
-      // const next = function (a, b) {
-      //   return a + b;
-      // };
+      // Expected Result
+      const expectedResult = { code: 500, message: 'Internal Error' };
       // Launch operation
       errorHandler(err, req, res);
       // Check
-      // expect(res._getJSON()).to.deep.equal(expectedResult); // eslint-disable-line no-underscore-dangle
+      expect(res._getJSON()).to.deep.equal(expectedResult); // eslint-disable-line no-underscore-dangle
+    });
+  });
+  describe('errorHandler - no status passed Successfully CASE', () => {
+    it('errorHandler - no status passed Successfully CASE', () => {
+      // IN params
+      const err = {
+        stack: 'stack created for testing...',
+        message: 'Internal Error',
+      };
+      const req = new MockExpressRequest();
+      const res = new MockExpressResponse();
+      // Expected Result
+      const expectedResult = { code: 500, message: 'Internal Error' };
+      // Launch operation
+      errorHandler(err, req, res);
+      // Check
+      expect(res._getJSON()).to.deep.equal(expectedResult); // eslint-disable-line no-underscore-dangle
+    });
+  });
+  describe('routeNotFoundErrorHandler - Successfully CASE', () => {
+    it('routeNotFoundErrorHandler - Successfully CASE', () => {
+      // IN params
+      const req = new MockExpressRequest({ method: 'GET', url: '/api/nonsense' });
+      const res = new MockExpressResponse();
+      // Expected Result
+      const expectedResult = { code: 404, message: 'Cannot GET /api/nonsense' };
+      // Launch operation
+      routeNotFoundErrorHandler(req, res);
+      // Check
+      expect(res._getJSON()).to.deep.equal(expectedResult); // eslint-disable-line no-underscore-dangle
     });
   });
 });

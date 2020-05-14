@@ -10,29 +10,32 @@ const loggerMock = require('../log/logger.mock');
 
 exports.getLogger = () => loggerMock;
 
-const set = (name, pathfile) => {
+const set = ({ name, pathfile }) => {
   moduleStore[name] = require(pathfile);
 };
 
 exports.get = (nameModule) => moduleStore[nameModule];
 
-exports.init = () => {
+const arrayObj = [
   // Logger
-  set('logger', '../log/logger.mock');
+  { name: 'logger', pathfile: '../log/logger.mock' },
   // Infrastructure Controllers (OpenApi Express Controllers)
-  set('healthcheckController', '../../infrastructure/server/controller/healthcheckController.mock');
-  set('getConfigController', '../../infrastructure/server/controller/getConfigController.mock');
+  { name: 'healthcheckController', pathfile: '../../infrastructure/server/controller/healthcheckController.mock' },
+  { name: 'getConfigController', pathfile: '../../infrastructure/server/controller/getConfigController.mock' },
   // Infrastructure Repositories
-  set('fileConfigRepository', '../repository/configRepository.mock');
-  set('remoteConfigRepository', '../repository/configRepository.mock');
-  set('containerConfigRepository', '../repository/configRepository.mock');
-  // Adapter Interface Components
-  // -- presenters
-  set('configJSONPresenter', '../../adapter/presenter/presenter.mock');
-  // set('configYAMLPresenter', '../../adapter/presenter/configYAMLPresenter');
-  // UseCases
-  set('loadConfigUC', '../../usecase/loadConfigUC.mock');
-  set('getConfigUC', '../../usecase/getConfigUC.mock');
+  { name: 'fileConfigRepository', pathfile: '../repository/configRepository.mock' },
+  { name: 'remoteConfigRepository', pathfile: '../repository/configRepository.mock' },
+  { name: 'containerConfigRepository', pathfile: '../repository/configRepository.mock' },
+  // Adapter Interface Components -- Presenters
+  { name: 'configJSONPresenter', pathfile: '../../adapter/presenter/presenter.mock' },
+  { name: 'configYAMLPresenter', pathfile: '../../adapter/presenter/presenter.mock' },
+  // Use Cases
+  { name: 'getConfigUC', pathfile: '../../usecase/loadConfigUC.mock' },
+  { name: 'loadConfigUC', pathfile: '../../usecase/getConfigUC.mock' },
+];
+
+exports.init = () => {
+  arrayObj.forEach((x) => set(x));
 };
 
 exports.init();

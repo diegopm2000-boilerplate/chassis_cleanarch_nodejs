@@ -17,10 +17,19 @@ const DEFAULT_SOCKET_TIMEOUT = 300000;
 
 let server;
 
-// TODO mejorar este error...si falla la ruta, pues da que res.status no es una funcion
-const errorHandler = (err, req, res) => {
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
   container.getLogger().error(`${MODULE_NAME} (ERROR) --> error: ${err.stack}`);
-  res.status(err.status).json(err);
+
+  const status = (err.status) ? err.status : 500;
+  const errorObj = { code: status, message: err.message };
+  res.status(status).json(errorObj);
+};
+
+// eslint-disable-next-line no-unused-vars
+const routeNotFoundErrorHandler = (req, res, next) => {
+  const errorObj = { code: 404, message: `Cannot ${req.method} ${req.path}` };
+  res.status(404).json(errorObj);
 };
 
 exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve, reject) => {
@@ -40,6 +49,8 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
       consumesMiddleware: {
         'application/json': bodyParser.json(),
       },
+      errorMiddleware: errorHandler,
+      // TODO ver si se pudieran cargar de forma automatica las operations
       operations: {
         check: container.get('healthcheckController').execute,
         getConfig: container.get('getConfigController').execute,
@@ -53,13 +64,12 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     const serverTimeOut = serverTimeout || DEFAULT_REQUEST_TIMEOUT;
     server.setTimeout(serverTimeOut);
 
-    // Error Handler
-    // eslint-disable-next-line no-unused-vars
-    app.use(errorHandler);
-
     // Exposes documentation using swagger-ui-express
     const swaggerDocument = YAML.load(apiDocument);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+    // Specific route for handle the 404 route not found
+    app.use(routeNotFoundErrorHandler);
 
     container.getLogger().info(`${MODULE_NAME} (OUT) --> App Server started at port: ${appPort} and Running OK!`);
 
