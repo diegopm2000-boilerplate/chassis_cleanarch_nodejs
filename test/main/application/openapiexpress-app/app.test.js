@@ -26,7 +26,7 @@ const containerMock = require('../../../mock/infrastructure/container/container.
 
 app.__set__('container', containerMock);
 
-describe('App OpenApiExpress - Tests', () => {
+describe('App - Tests', () => {
   describe('loadEnvVars - Successfully CASE', () => {
     it('loadEnvVars - Successfully CASE', () => {
       // Params IN

@@ -2,11 +2,8 @@
 
 /* eslint-disable no-unused-vars */
 
-exports.start = async ({ port, apiDocument, serverTimeout }) => {
-  return new Promise((resolve) => {
-    console.log('Entramos en el openapiexpress.mock');
-    resolve(true);
-  });
-};
+exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve) => {
+  resolve(true);
+});
 
 exports.stop = () => {};
