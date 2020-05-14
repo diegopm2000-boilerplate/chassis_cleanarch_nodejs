@@ -15,6 +15,13 @@ const DEFAULT_PORT = 8080;
 const DEFAULT_REQUEST_TIMEOUT = 50000;
 const DEFAULT_SOCKET_TIMEOUT = 300000;
 
+let server;
+
+const errorHandler = (err, req, res) => {
+  container.getLogger().error(`${MODULE_NAME} (ERROR) --> error: ${err.stack}`);
+  res.status(err.status).json(err);
+};
+
 exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve, reject) => {
   try {
     container.getLogger().info(`${MODULE_NAME} (IN) --> port: ${port}, apiDocument: ${apiDocument}, serverTimeout: ${serverTimeout}`);
@@ -23,7 +30,7 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     const app = express();
 
     const appPort = port || DEFAULT_PORT;
-    module.exports.server = app.listen(appPort);
+    server = app.listen(appPort);
 
     // Initialize ExpressOpenApi
     expressOpenapi.initialize({
@@ -39,18 +46,15 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     });
 
     // Socket timeout
-    module.exports.server.timeout = DEFAULT_SOCKET_TIMEOUT;
+    server.timeout = DEFAULT_SOCKET_TIMEOUT;
 
     // Request timeout (in ms)
     const serverTimeOut = serverTimeout || DEFAULT_REQUEST_TIMEOUT;
-    module.exports.server.setTimeout(serverTimeOut);
+    server.setTimeout(serverTimeOut);
 
     // Error Handler
     // eslint-disable-next-line no-unused-vars
-    app.use((err, req, res, next) => {
-      container.logger.error(`${MODULE_NAME} (ERROR) --> error: ${err.stack}`);
-      res.status(err.status).json(err);
-    });
+    app.use(errorHandler);
 
     // Exposes documentation using swagger-ui-express
     const swaggerDocument = YAML.load(apiDocument);
@@ -62,18 +66,17 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
     // falta soporte CORS
 
     // TODO
-    // falta securización API (Helm)
+    // falta securización API (Helmet)
 
     // TODO
     // falta privatización API
-
     resolve(true);
   } catch (error) {
-    container.logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);
+    container.getLogger().error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);
     reject(new Error('Express did not start correctly!'));
   }
 });
 
 exports.stop = () => {
-  module.exports.server.close(() => { container.getLogger().info('App Server stopped'); });
+  server.close(() => { container.getLogger().info('App Server stopped'); });
 };

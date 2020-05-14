@@ -12,6 +12,11 @@ const sinon = require('sinon');
 // Main module tested
 const app = rewire('../../../../src/application/openapiexpress-app/app');
 
+const openapiexpressMock = require('../../../mock/infrastructure/server/openapiexpress.mock');
+
+// Set the apiserver mock
+app.__set__('apiserver', openapiexpressMock);
+
 // Access to private methods
 const loadEnvVars = app.__get__('loadEnvVars');
 const initConfig = app.__get__('initConfig');

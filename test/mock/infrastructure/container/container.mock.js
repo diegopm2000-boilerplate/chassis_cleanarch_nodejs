@@ -16,14 +16,12 @@ const set = (name, pathfile) => {
 
 exports.get = (nameModule) => moduleStore[nameModule];
 
-// const c = require('../log/logger.mock')
-
 exports.init = () => {
   // Logger
   set('logger', '../log/logger.mock');
   // Infrastructure Controllers (OpenApi Express Controllers)
-  // set('healthcheckController', '../server/controller/healthcheckController');
-  // set('getConfigController', '../../infrastructure/server/controller/getConfigController');
+  set('healthcheckController', '../../infrastructure/server/controller/healthcheckController.mock');
+  set('getConfigController', '../../infrastructure/server/controller/getConfigController.mock');
   // Infrastructure Repositories
   // set('fileConfigRepository', '../repository/fileConfigRepository');
   // set('remoteConfigRepository', '../repository/remoteConfigRepository');
