@@ -32,7 +32,7 @@ exports.init = () => {
   // Adapter Interface Components
   set('loadConfigAdapterController', '../../adapter/controller/loadConfigAdapterController.mock');
   set('getConfigAdapterController', '../../adapter/controller/getConfigAdapterController.mock');
-  // set('configJSONPresenter', '../../adapter/presenter/configJSONPresenter.mock');
+  set('configJSONPresenter', '../../adapter/presenter/presenter.mock');
   // set('configYAMLPresenter', '../../adapter/presenter/configYAMLPresenter');
 };
 

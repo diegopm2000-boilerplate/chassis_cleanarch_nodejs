@@ -40,6 +40,7 @@ const loadEnvVars = () => {
 };
 
 const initConfig = async (envVars, logger) => {
+  console.log('Entrando en initConfig');
   const funcName = initConfig.name;
   logger.info(`${MODULE_NAME}:${funcName} (IN) --> envVars: ${JSON.stringify(envVars)}`);
 
@@ -49,17 +50,25 @@ const initConfig = async (envVars, logger) => {
     throw new Error(msgError);
   }
 
+  console.log('Hasta aquí sin fallo!');
+
   const endpoint = envVars.configSpringCfg;
   const initialRepositoryName = (YAML_FILE === envVars.configSource) ? 'fileConfigRepository' : 'remoteConfigRepository';
 
+  console.log(`initialRepositoryName: ${initialRepositoryName}`);
+
   const filename = envVars.configFileName;
   const loadConfigAdapterController = container.get('loadConfigAdapterController');
+  
+  console.log(' a ver');
   const initialRepository = container.get(initialRepositoryName);
   const destinyRepository = container.get('containerConfigRepository');
   const presenter = container.get('configJSONPresenter');
 
   await loadConfigAdapterController.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
   logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
+
+  return true;
 };
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -69,7 +78,7 @@ const initConfig = async (envVars, logger) => {
 process.on('unhandledRejection', (err, p) => {
   container.getLogger().error(`${MODULE_NAME} (ERROR) --> An unhandledRejection occurred...`);
   container.getLogger().error(`${MODULE_NAME} (ERROR) --> Rejected Promise: ${p}`);
-  container.getLogger().error(`${MODULE_NAME} (ERROR) --> Rejection: ${err.stack}`);
+  container.getLogger().error(`${MODULE_NAME} (ERROR) --> Rejection: ${err}`);
 });
 
 // //////////////////////////////////////////////////////////////////////////////
