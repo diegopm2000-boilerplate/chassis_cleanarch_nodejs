@@ -45,7 +45,7 @@ exports.start = async ({
     const app = express();
 
     // Handle the server timeout
-    const appTimeout = serverTimeout || DEFAULT_REQUEST_TIMEOUT
+    const appTimeout = serverTimeout || DEFAULT_REQUEST_TIMEOUT;
     app.use(timeout(appTimeout));
 
     // Define the app listen port
