@@ -110,7 +110,7 @@ exports.init = async () => {
       enableCors: config.express.enableCors,
     };
 
-    apiserver.start(options);
+    await apiserver.start(options);
 
     logger.debug(`${MODULE_NAME} (OUT) --> result: ${true}`);
     return true;
@@ -120,4 +120,6 @@ exports.init = async () => {
   }
 };
 
-require('make-runnable');
+require('make-runnable/custom')({
+  printOutputFrame: false,
+});

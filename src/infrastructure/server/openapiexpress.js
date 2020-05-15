@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const YAML = require('yamljs');
 
 const container = require('../container/container');
+const security = require('../security/security');
 
 const MODULE_NAME = '[OpenApiExpress Server]';
 
@@ -43,11 +44,15 @@ exports.start = async ({
     // Instance Expresss
     const app = express();
 
-    // Handles the server timeout
+    // Handle the server timeout
     app.use(timeout(serverTimeout || DEFAULT_REQUEST_TIMEOUT));
 
+    // Define the app listen port
     const appPort = port || DEFAULT_PORT;
     server = app.listen(appPort);
+
+    // Init Security
+    security.init(app);
 
     // Initialize ExpressOpenApi
     expressOpenapi.initialize({
@@ -57,28 +62,25 @@ exports.start = async ({
         'application/json': bodyParser.json(),
       },
       errorMiddleware: errorHandler,
+      // Put your operation controllers here
       operations: {
         check: container.get('healthcheckController').execute,
         getConfig: container.get('getConfigController').execute,
       },
     });
 
-    // Exposes documentation using swagger-ui-express
+    // Expose documentation using swagger-ui-express
     const swaggerDocument = YAML.load(apiDocument);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     // Specific route for handle the 404 route not found
     app.use(routeNotFoundErrorHandler);
 
-    container.getLogger().info(`${MODULE_NAME} (OUT) --> App Server started at port: ${appPort} and Running OK!`);
-
     // Enable CORS
     if (enableCors) {
       container.getLogger().info(`${MODULE_NAME} (MID) --> Enabling CORS`);
       app.use(cors());
     }
-
-    // TODO falta securización API (Helmet)
 
     // TODO falta privatización API
 

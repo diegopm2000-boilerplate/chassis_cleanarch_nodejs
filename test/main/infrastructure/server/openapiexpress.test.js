@@ -15,9 +15,12 @@ const openapiexpress = rewire('../../../../src/infrastructure/server/openapiexpr
 
 // Mocks
 const containerMock = require('../../../mock/infrastructure/container/container.mock');
+const securityMock = require('../../../mock/infrastructure/security/security.mock');
 
 // Set the container Mock
 openapiexpress.__set__('container', containerMock);
+openapiexpress.__set__('security', securityMock);
+
 const errorHandler = openapiexpress.__get__('errorHandler');
 const routeNotFoundErrorHandler = openapiexpress.__get__('routeNotFoundErrorHandler');
 
