@@ -2,6 +2,7 @@
 
 const express = require('express');
 const expressOpenapi = require('express-openapi');
+const timeout = require('connect-timeout');
 
 const cors = require('cors');
 
@@ -14,8 +15,7 @@ const container = require('../container/container');
 const MODULE_NAME = '[OpenApiExpress Server]';
 
 const DEFAULT_PORT = 8080;
-const DEFAULT_REQUEST_TIMEOUT = 50000; // in miliseconds
-const DEFAULT_SOCKET_TIMEOUT = 50000; // in miliseconds
+const DEFAULT_REQUEST_TIMEOUT = '50s';
 
 let server;
 
@@ -43,6 +43,9 @@ exports.start = async ({
     // Instance Expresss
     const app = express();
 
+    // Handles the server timeout
+    app.use(timeout(serverTimeout || DEFAULT_REQUEST_TIMEOUT));
+
     const appPort = port || DEFAULT_PORT;
     server = app.listen(appPort);
 
@@ -54,21 +57,11 @@ exports.start = async ({
         'application/json': bodyParser.json(),
       },
       errorMiddleware: errorHandler,
-      // TODO ver si se pudieran cargar de forma automatica las operations
       operations: {
         check: container.get('healthcheckController').execute,
         getConfig: container.get('getConfigController').execute,
       },
     });
-
-    // TODO mejorar el tema del timeout
-
-    // Socket timeout (in ms)
-    server.timeout = DEFAULT_SOCKET_TIMEOUT;
-
-    // Request timeout (in ms) - Is the time that express will wait to execute a request
-    const serverTimeOut = serverTimeout || DEFAULT_REQUEST_TIMEOUT;
-    server.setTimeout(serverTimeOut);
 
     // Exposes documentation using swagger-ui-express
     const swaggerDocument = YAML.load(apiDocument);

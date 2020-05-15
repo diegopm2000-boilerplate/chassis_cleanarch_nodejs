@@ -59,7 +59,6 @@ const initConfig = async (envVars, logger) => {
   const presenter = container.get('configJSONPresenter');
 
   const config = await loadConfigUC.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
-  console.log(`--> config: ${JSON.stringify(config)}`);
 
   logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config: ${JSON.stringify(config)}`);
   return config;
@@ -82,6 +81,8 @@ process.on('unhandledRejection', (err, p) => {
 exports.init = async () => {
   let logger;
   try {
+    // TODO mejorar el logger inicial para no tener que poner console.log en ningun sitio
+
     console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
 
     // Init Environment Variables
@@ -101,15 +102,13 @@ exports.init = async () => {
     console.log(`--> config: ${JSON.stringify(config)}`);
     logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK: ${JSON.stringify(config)}`);
 
-    console.log('AAA');
     // start apiserver
     const options = {
       port: envVars.configPort,
       apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`,
-      serverTimeout: 50000,
+      serverTimeout: config.express.timeout,
       enableCors: config.express.enableCors,
     };
-    console.log('BBB');
 
     apiserver.start(options);
 

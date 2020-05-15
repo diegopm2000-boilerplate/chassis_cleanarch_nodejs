@@ -6,3 +6,4 @@ log:
   level: debug # modes available orderer by magnitude: error, warning, info, debug
 express:
   enableCors: false
+  timeout: 10s

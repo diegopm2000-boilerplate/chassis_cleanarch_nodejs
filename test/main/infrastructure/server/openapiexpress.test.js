@@ -30,7 +30,7 @@ describe('OpenApiExpress - Tests', () => {
       const options = {
         port: 8090,
         apiDocument: './src/infrastructure/api/openapi.yaml',
-        serverTimeout: 50000,
+        serverTimeout: '5s',
         enableCors: true,
       };
       // Expected result
@@ -54,7 +54,7 @@ describe('OpenApiExpress - Tests', () => {
       // IN params
       const options = {
         apiDocument: './src/infrastructure/api/openapi.yaml',
-        serverTimeout: 50000,
+        serverTimeout: '5s',
         enableCors: true,
       };
       // Expected result
@@ -103,7 +103,7 @@ describe('OpenApiExpress - Tests', () => {
       const options = {
         port: 8090,
         apiDocument: './src/infrastructure/api/openapi.yaml',
-        serverTimeout: 50000,
+        serverTimeout: '5s',
         enableCors: false,
       };
       // Expected result
@@ -139,7 +139,7 @@ describe('OpenApiExpress - Tests', () => {
       const options = {
         port: 8090,
         apiDocument: './src/infrastructure/api/openapi.yaml',
-        serverTimeout: 50000,
+        serverTimeout: '5s',
       };
       // Expected result
       const expectedErrorMessage = 'Express did not start correctly!';
