@@ -102,14 +102,16 @@ exports.init = async () => {
     console.log(`--> config: ${JSON.stringify(config)}`);
     logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK: ${JSON.stringify(config)}`);
 
-    // start apiserver
+    // options passed to apiserver
     const options = {
       port: envVars.configPort,
       apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`,
       serverTimeout: config.express.timeout,
       enableCors: config.express.enableCors,
+      httpsAlways: config.express.httpsAlways,
     };
 
+    // Start api server
     await apiserver.start(options);
 
     logger.debug(`${MODULE_NAME} (OUT) --> result: ${true}`);

@@ -7,3 +7,4 @@ log:
 express:
   enableCors: false
   timeout: 10s
+  httpsAlways: false

@@ -16,8 +16,8 @@ const MODULE_NAME = '[Security]';
 // PUBLIC METHODS
 // //////////////////////////////////////////////////////////////////////////////
 
-exports.init = (app, useHsts) => {
-  container.getLogger().debug(`${MODULE_NAME} init (IN) --> app: <<app>>, useHsts: ${useHsts}`);
+exports.init = (app, httpsAlways) => {
+  container.getLogger().debug(`${MODULE_NAME} init (IN) --> app: <<app>>, httpsAlways: ${httpsAlways}`);
 
   // 1. Use helmet framework security. View in npm helmet the issues activated by default
   app.use(helmet());
@@ -28,7 +28,7 @@ exports.init = (app, useHsts) => {
   }));
 
   // 3. Force https always
-  if (useHsts) {
+  if (httpsAlways) {
     app.use(hsts({
       maxAge: 31536000, // 365 days in seconds
     }));

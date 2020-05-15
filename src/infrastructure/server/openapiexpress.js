@@ -36,7 +36,7 @@ const routeNotFoundErrorHandler = (req, res, next) => {
 };
 
 exports.start = async ({
-  port, apiDocument, serverTimeout, enableCors,
+  port, apiDocument, serverTimeout, enableCors, httpsAlways,
 }) => new Promise((resolve, reject) => {
   try {
     container.getLogger().info(`${MODULE_NAME} (IN) --> port: ${port}, apiDocument: ${apiDocument}, serverTimeout: ${serverTimeout}`);
@@ -52,7 +52,7 @@ exports.start = async ({
     server = app.listen(appPort);
 
     // Init Security
-    security.init(app);
+    security.init(app, httpsAlways);
 
     // Initialize ExpressOpenApi
     expressOpenapi.initialize({
