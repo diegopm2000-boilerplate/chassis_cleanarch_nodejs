@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint 'src/**/*.js'",
-    "start-manual": "node src/application/manual-app/app.js",
-    "start": "node src/application/openapiexpress-app/app.js init",
+    "start": "node src/infrastructure/application/app.js init",
     "test": "node ./node_modules/mocha/bin/mocha --recursive --timeout 20000 --reporter spec --exit",
     "coverage": "nyc --reporter=text --reporter=lcov npm test"
   },

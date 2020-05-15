@@ -10,7 +10,7 @@ const rewire = require('rewire');
 const sinon = require('sinon');
 
 // Main module tested
-const app = rewire('../../../../src/application/openapiexpress-app/app');
+const app = rewire('../../../../src/infrastructure/application/app');
 
 const expectations = require('../../../expectations/expectations');
 

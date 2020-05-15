@@ -2,9 +2,9 @@
 
 /* eslint-disable no-console */
 
-const container = require('../../infrastructure/container/container');
+const container = require('../container/container');
 
-const apiserver = require('../../infrastructure/server/openapiexpress');
+const apiserver = require('../server/openapiexpress');
 
 // TODO Mover esto dentro de infrastructura para mayor claridad
 
