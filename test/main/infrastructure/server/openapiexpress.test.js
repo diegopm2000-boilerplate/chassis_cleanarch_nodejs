@@ -31,6 +31,7 @@ describe('OpenApiExpress - Tests', () => {
         port: 8090,
         apiDocument: './src/infrastructure/api/openapi.yaml',
         serverTimeout: 50000,
+        enableCors: true,
       };
       // Expected result
       const expectedResult = true;
@@ -54,6 +55,7 @@ describe('OpenApiExpress - Tests', () => {
       const options = {
         apiDocument: './src/infrastructure/api/openapi.yaml',
         serverTimeout: 50000,
+        enableCors: true,
       };
       // Expected result
       const expectedResult = true;
@@ -77,6 +79,32 @@ describe('OpenApiExpress - Tests', () => {
       const options = {
         port: 8090,
         apiDocument: './src/infrastructure/api/openapi.yaml',
+        enableCors: true,
+      };
+      // Expected result
+      const expectedResult = true;
+
+      // Launch operation
+      openapiexpress.start(options)
+        .then((result) => {
+          // Check
+          expect(result).to.equal(expectedResult);
+          // Calling Stop Server
+          setTimeout(() => {
+            openapiexpress.stop();
+            done();
+          }, defaultTimeOut);
+        });
+    });
+  });
+  describe('OpenApiExpress - start with disabled CORS Successfully CASE', () => {
+    it('OpenApiExpress - start with disabled CORS Successfully CASE', (done) => {
+      // IN params
+      const options = {
+        port: 8090,
+        apiDocument: './src/infrastructure/api/openapi.yaml',
+        serverTimeout: 50000,
+        enableCors: false,
       };
       // Expected result
       const expectedResult = true;

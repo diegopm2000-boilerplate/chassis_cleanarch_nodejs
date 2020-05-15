@@ -12,6 +12,8 @@ const sinon = require('sinon');
 // Main module tested
 const app = rewire('../../../../src/application/openapiexpress-app/app');
 
+const expectations = require('../../../expectations/expectations');
+
 const openapiexpressMock = require('../../../mock/infrastructure/server/openapiexpress.mock');
 
 // Set the apiserver mock
@@ -62,7 +64,7 @@ describe('App - Tests', () => {
         };
         const logger = containerMock.getLogger();
         // Expected Result
-        const expectedResult = true;
+        const expectedResult = expectations.config;
         // Launch
         const result = await initConfig(envVars, logger);
         // Check
@@ -81,7 +83,7 @@ describe('App - Tests', () => {
         };
         const logger = containerMock.getLogger();
         // Expected Result
-        const expectedResult = true;
+        const expectedResult = expectations.config;
         // Launch
         const result = await initConfig(envVars, logger);
         // Check

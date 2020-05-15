@@ -28,7 +28,7 @@ describe('getConfigController - Infrastructure - Tests', () => {
       const req = new MockExpressRequest();
       const res = new MockExpressResponse();
       // Expected Result
-      const expectedResult = expectations.defaultObj;
+      const expectedResult = expectations.config;
       // Launch operation
       await getConfigController.execute(req, res);
       // Check

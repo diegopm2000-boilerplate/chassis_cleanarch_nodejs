@@ -6,6 +6,8 @@ const container = require('../../infrastructure/container/container');
 
 const apiserver = require('../../infrastructure/server/openapiexpress');
 
+// TODO Mover esto dentro de infrastructura para mayor claridad
+
 // //////////////////////////////////////////////////////////////////////////////
 // Constants & Properties
 // //////////////////////////////////////////////////////////////////////////////
@@ -58,10 +60,11 @@ const initConfig = async (envVars, logger) => {
   const destinyRepository = container.get('containerConfigRepository');
   const presenter = container.get('configJSONPresenter');
 
-  await loadConfigUC.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
-  logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config loaded OK`);
+  const config = await loadConfigUC.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
+  console.log(`--> config: ${JSON.stringify(config)}`);
 
-  return true;
+  logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config: ${JSON.stringify(config)}`);
+  return config;
 };
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -96,11 +99,23 @@ exports.init = async () => {
     logger.debug(`${MODULE_NAME} (MID) --> Logger initialized OK`);
 
     // Init Configuration
-    await initConfig(envVars, logger);
-    logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK`);
+    const config = await initConfig(envVars, logger);
+    console.log(`--> config: ${JSON.stringify(config)}`);
+    logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK: ${JSON.stringify(config)}`);
 
-    // Init server & start
-    apiserver.start({ port: envVars.configPort, apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`, serverTimeout: 50000 });
+    console.log('AAA');
+    // start apiserver
+    const options = {
+      port: envVars.configPort,
+      apiDocument: `${APIDOC_BASEPATH}/${envVars.apiDoc}`,
+      serverTimeout: 50000,
+      enableCors: config.express.enableCors,
+    };
+    console.log('BBB');
+
+    apiserver.start(options);
+
+    logger.debug(`${MODULE_NAME} (OUT) --> result: ${true}`);
     return true;
   } catch (error) {
     logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);

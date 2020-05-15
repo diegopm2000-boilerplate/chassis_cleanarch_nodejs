@@ -11,7 +11,7 @@ export NODE_CONFIG_SPRINGCFG_ENDPOINT="NONE"
 env | grep '^NODE_CONFIG_SPRINGCFG_ENDPOINT='
 
 # Configuration File
-export NODE_CONFIG_FILE="chassis-dev.json"
+export NODE_CONFIG_FILE="chassis-dev.yaml"
 env | grep '^NODE_CONFIG_FILE='
 
 # App Port

@@ -5,5 +5,5 @@
 const expectations = require('../../expectations/expectations');
 
 exports.execute = (initialRepository, destinyRepository, presenter, logger, filename, endpoint) => new Promise((resolve) => {
-  resolve(expectations.defaultObj);
+  resolve(expectations.config);
 });

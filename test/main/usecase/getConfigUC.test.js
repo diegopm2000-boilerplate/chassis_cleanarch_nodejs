@@ -7,6 +7,8 @@ const { expect } = require('chai');
 // Main module tested
 const getConfigUC = require('../../../src/usecase/getConfigUC');
 
+const expectations = require('../../expectations/expectations');
+
 // Mocks
 const repository = require('../../mock/infrastructure/repository/configRepository.mock');
 const logger = require('../../mock/infrastructure/log/logger.mock');
@@ -18,7 +20,7 @@ describe('getConfigUC - Tests', () => {
       // Params IN
       const filename = 'myfilename.yml';
       // Expected Result
-      const expectedResult = {};
+      const expectedResult = expectations.config;
       // Launch operation
       const result = await getConfigUC.execute(repository, presenter, logger, filename);
       // Check

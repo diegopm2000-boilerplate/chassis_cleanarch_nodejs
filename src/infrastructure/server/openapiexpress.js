@@ -3,6 +3,8 @@
 const express = require('express');
 const expressOpenapi = require('express-openapi');
 
+const cors = require('cors');
+
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
 const YAML = require('yamljs');
@@ -32,7 +34,9 @@ const routeNotFoundErrorHandler = (req, res, next) => {
   res.status(404).json(errorObj);
 };
 
-exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((resolve, reject) => {
+exports.start = async ({
+  port, apiDocument, serverTimeout, enableCors,
+}) => new Promise((resolve, reject) => {
   try {
     container.getLogger().info(`${MODULE_NAME} (IN) --> port: ${port}, apiDocument: ${apiDocument}, serverTimeout: ${serverTimeout}`);
 
@@ -57,10 +61,12 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
       },
     });
 
-    // Socket timeout
+    // TODO mejorar el tema del timeout
+
+    // Socket timeout (in ms)
     server.timeout = DEFAULT_SOCKET_TIMEOUT;
 
-    // Request timeout (in ms)
+    // Request timeout (in ms) - Is the time that express will wait to execute a request
     const serverTimeOut = serverTimeout || DEFAULT_REQUEST_TIMEOUT;
     server.setTimeout(serverTimeOut);
 
@@ -73,14 +79,25 @@ exports.start = async ({ port, apiDocument, serverTimeout }) => new Promise((res
 
     container.getLogger().info(`${MODULE_NAME} (OUT) --> App Server started at port: ${appPort} and Running OK!`);
 
-    // TODO
-    // falta soporte CORS
+    // Enable CORS
+    if (enableCors) {
+      container.getLogger().info(`${MODULE_NAME} (MID) --> Enabling CORS`);
+      app.use(cors());
+    }
 
     // TODO
     // falta securización API (Helmet)
 
     // TODO
     // falta privatización API
+
+    const appServerStatus = {
+      appPort,
+      enableCors,
+    };
+
+    container.getLogger().info(`${MODULE_NAME} (MID) --> appServerStatus: ${JSON.stringify(appServerStatus)}`);
+
     resolve(true);
   } catch (error) {
     container.getLogger().error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);
