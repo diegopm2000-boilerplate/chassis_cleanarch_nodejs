@@ -1,7 +1,5 @@
 // app.js
 
-/* eslint-disable no-console */
-
 const container = require('../container/container');
 
 const apiserver = require('../server/openapiexpress');
@@ -24,7 +22,7 @@ const APIDOC_BASEPATH = './src/infrastructure/api';
 
 const loadEnvVars = () => {
   const funcName = loadEnvVars.name;
-  console.log(`${MODULE_NAME}${funcName} (IN) --> no params`);
+  container.getLogger().debug(`${MODULE_NAME}${funcName} (IN) --> no params`);
 
   const result = {
     configSource: process.env.NODE_CONFIG_SOURCE_APP,
@@ -34,14 +32,14 @@ const loadEnvVars = () => {
     configSpringCfg: process.env.NODE_CONFIG_SPRINGCFG_ENDPOINT,
   };
 
-  console.log(`${MODULE_NAME}${funcName} (OUT) --> result: ${JSON.stringify(result)}`);
+  container.getLogger().debug(`${MODULE_NAME}${funcName} (OUT) --> result: ${JSON.stringify(result)}`);
 
   return result;
 };
 
 const initConfig = async (envVars, logger) => {
   const funcName = initConfig.name;
-  logger.info(`${MODULE_NAME}:${funcName} (IN) --> envVars: ${JSON.stringify(envVars)}`);
+  logger.debug(`${MODULE_NAME}:${funcName} (IN) --> envVars: ${JSON.stringify(envVars)}`);
 
   if (envVars.configSource !== YAML_FILE && envVars.configSource !== GIT) {
     const msgError = 'Config Source not valid';
@@ -60,7 +58,7 @@ const initConfig = async (envVars, logger) => {
 
   const config = await loadConfigUC.execute(initialRepository, destinyRepository, presenter, logger, filename, endpoint);
 
-  logger.info(`${MODULE_NAME}:${funcName} (OUT) --> config: ${JSON.stringify(config)}`);
+  logger.debug(`${MODULE_NAME}:${funcName} (OUT) --> config: ${JSON.stringify(config)}`);
   return config;
 };
 
@@ -81,16 +79,17 @@ process.on('unhandledRejection', (err, p) => {
 exports.init = async () => {
   let logger;
   try {
-    // TODO mejorar el logger inicial para no tener que poner console.log en ningun sitio
-
-    console.log(`${MODULE_NAME} (IN) --> Initializing Application...`);
+    // Init container with default logger
+    container.defaultInit();
+    logger = container.getLogger();
+    logger.info(`${MODULE_NAME} (IN) --> Initializing Application...`);
 
     // Init Environment Variables
     const envVars = loadEnvVars();
 
     // Init Container
     container.init();
-    console.log(`${MODULE_NAME} (MID) --> Container initialized OK`);
+    logger.info(`${MODULE_NAME} (MID) --> Container initialized OK`);
 
     // Init logger
     logger = container.getLogger();
@@ -99,7 +98,6 @@ exports.init = async () => {
 
     // Init Configuration
     const config = await initConfig(envVars, logger);
-    console.log(`--> config: ${JSON.stringify(config)}`);
     logger.debug(`${MODULE_NAME} (MID) --> Config initialized OK: ${JSON.stringify(config)}`);
 
     // options passed to apiserver
@@ -114,7 +112,7 @@ exports.init = async () => {
     // Start api server
     await apiserver.start(options);
 
-    logger.debug(`${MODULE_NAME} (OUT) --> result: ${true}`);
+    logger.info(`${MODULE_NAME} (OUT) --> result: ${true}`);
     return true;
   } catch (error) {
     logger.error(`${MODULE_NAME} (ERROR) --> error: ${error.stack}`);

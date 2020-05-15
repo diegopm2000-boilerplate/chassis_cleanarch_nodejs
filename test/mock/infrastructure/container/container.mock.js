@@ -34,6 +34,10 @@ const arrayObj = [
   { name: 'loadConfigUC', pathfile: '../../usecase/getConfigUC.mock' },
 ];
 
+exports.defaultInit = () => {
+  set({ name: 'logger', pathfile: '../log/logger.mock' });
+};
+
 exports.init = () => {
   arrayObj.forEach((x) => set(x));
 };

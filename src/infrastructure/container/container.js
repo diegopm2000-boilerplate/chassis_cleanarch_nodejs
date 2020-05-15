@@ -32,6 +32,10 @@ const arrayObj = [
   { name: 'loadConfigUC', pathfile: '../../usecase/loadConfigUC' },
 ];
 
+exports.defaultInit = () => {
+  set({ name: 'logger', pathfile: '../log/consoleLogger' });
+};
+
 exports.init = () => {
   arrayObj.forEach((x) => set(x));
 };

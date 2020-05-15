@@ -38,6 +38,18 @@ describe('Container Infra - Tests', () => {
       expect(result).to.equal(expectedResult);
     });
   });
+  describe('defaultInit container - Successfully CASE', () => {
+    it('defaultInit container - Successfully CASE', async () => {
+      // Params IN
+      const moduleName = 'logger';
+      // Expected Result
+      const expectedResult = require('../../../../src/infrastructure/log/consoleLogger');
+      // Launch Operations
+      container.defaultInit();
+      const result = container.get(moduleName);
+      expect(result).to.equal(expectedResult);
+    });
+  });
   describe('getLogger - Successfully CASE', () => {
     it('getLogger - Successfully CASE', async () => {
       // Params IN

@@ -45,7 +45,8 @@ exports.start = async ({
     const app = express();
 
     // Handle the server timeout
-    app.use(timeout(serverTimeout || DEFAULT_REQUEST_TIMEOUT));
+    const appTimeout = serverTimeout || DEFAULT_REQUEST_TIMEOUT
+    app.use(timeout(appTimeout));
 
     // Define the app listen port
     const appPort = port || DEFAULT_PORT;
@@ -87,9 +88,10 @@ exports.start = async ({
     const appServerStatus = {
       appPort,
       enableCors,
+      appTimeout,
     };
 
-    container.getLogger().info(`${MODULE_NAME} (MID) --> appServerStatus: ${JSON.stringify(appServerStatus)}`);
+    container.getLogger().info(`${MODULE_NAME} (OUT) --> appServerStatus: ${JSON.stringify(appServerStatus)}`);
 
     resolve(true);
   } catch (error) {
