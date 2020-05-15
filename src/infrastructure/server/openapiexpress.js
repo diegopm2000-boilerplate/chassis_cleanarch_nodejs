@@ -14,8 +14,8 @@ const container = require('../container/container');
 const MODULE_NAME = '[OpenApiExpress Server]';
 
 const DEFAULT_PORT = 8080;
-const DEFAULT_REQUEST_TIMEOUT = 50000;
-const DEFAULT_SOCKET_TIMEOUT = 300000;
+const DEFAULT_REQUEST_TIMEOUT = 50000; // in miliseconds
+const DEFAULT_SOCKET_TIMEOUT = 50000; // in miliseconds
 
 let server;
 
@@ -85,11 +85,9 @@ exports.start = async ({
       app.use(cors());
     }
 
-    // TODO
-    // falta securización API (Helmet)
+    // TODO falta securización API (Helmet)
 
-    // TODO
-    // falta privatización API
+    // TODO falta privatización API
 
     const appServerStatus = {
       appPort,
